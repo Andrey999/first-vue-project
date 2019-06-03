@@ -1,1 +1,1 @@
-# first-vue-project
+# vue-project
