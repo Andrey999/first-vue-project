@@ -29,8 +29,8 @@ export default {
   }
 
   .app {
-    width: 95%;
-    padding: 0 35px;
+    padding: 0 40px;
+    margin-bottom: 30px;
   }
 
 </style>

@@ -10,4 +10,4 @@ Vue.component('Cars',{
 new Vue({
   el: '#app',
   render: h => h(App)
-})
+});
