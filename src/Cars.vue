@@ -44,29 +44,43 @@
                         <li>Owner - <strong>{{ car.owner }}</strong></li>
                     </ul>
 
-                    <a class="details__phone" :class="[ isActiveTel ? '' : 'showTel']" :tel="car.phone">{{ car.phone }}</a>
+                        <a class="details__phone" :class="[ isActiveTel ? '' : 'showTel']" :tel="car.phone">{{ car.phone }}</a>
 
                     <div class="buttons__details">
                         <button class="btn btn__success" @click="togglePhone">{{ phoneBtnText }}</button>
-                        <button class="btn btn__primary">Buy</button>
+                        <button class="btn btn__primary" @click="modalVisible = true">Buy</button>
                     </div>
                 </div>
 
             </div>
-
         </div>
 
-        <div class="modal">
-            <h3>Do you want by this car?</h3>
-            <p>Modal body text going here</p>
-            <span>X</span>
-            <div class="modal__btn">
-                <button class="btn btn__save">Save changes</button>
-                <button class="btn btn__close">Close</button>
+        <div class="success" v-if="buyCarsBlockVisible">
+            <ul class="buy__car-list">
+                <li v-for="buyCar in buyCars">{{ buyCar }}</li>
+            </ul>
+        </div>
+
+        <transition name="modal">
+            <div class="modal" v-if="modalVisible">
+                <h3>Do you want by this car?</h3>
+                <p>Current car - <strong>{{ car.name }}</strong></p>
+
+                <ul class="details__list">
+                    <li>Model - <strong>{{ car.model }}</strong></li>
+                    <li>Year - <strong>{{ car.year }}</strong></li>
+                    <li>Owner - <strong>{{ car.owner }}</strong></li>
+                </ul>
+
+                <span @click="modalVisible = false">X</span>
+                <div class="modal__btn">
+                    <button class="btn btn__save" @click="newOrder">Buy</button>
+                    <button class="btn btn__close" @click="modalVisible = false">Cancel</button>
+                </div>
             </div>
-        </div>
+        </transition>
 
-        <div class="backdrop"></div>
+        <div v-if="modalVisible" class="backdrop"></div>
 
     </div>
 </template>
@@ -85,6 +99,9 @@
                selectedCarIndex: 0,
                isActiveTel: false,
                search: '',
+               modalVisible: false,
+               buyCars: [],
+               buyCarsBlockVisible: false
                }
            },
 
@@ -95,6 +112,12 @@
             },
             togglePhone: function() {
                     this.isActiveTel = !this.isActiveTel
+            },
+            newOrder: function() {
+                    this.modalVisible = false;
+                    this.buyCarsBlockVisible = true;
+                    this.buyCars = [`Success order: ${this.car.name} - ${this.car.model} - ${ new Date().toLocaleString()}`];
+                    setTimeout(() => {return this.buyCarsBlockVisible = false},5000)
             }
         },
 
@@ -106,6 +129,11 @@
                 return this.cars.filter(car => {
                     return car.name.toLocaleLowerCase().indexOf(this.search) > -1 || car.model.toLocaleLowerCase().includes(this.search);
                 })
+            }
+        },
+        filters: {
+            date: function(value) {
+                return value.toLocaleString();
             }
         }
     }
@@ -206,6 +234,7 @@
         font-size: 18px;
         font-weight: 200;
         margin-bottom: 10px;
+        transition: transform .5s;
     }
 
     // btn
@@ -243,10 +272,11 @@
     }
     // add class to
     .activeCarElem {
-        background: dodgerblue;
+        background: dodgerblue !important;
     }
     // add class to show or hide phone
     .showTel {
+        transform: translateX(152px);
         opacity: 0;
     }
 
@@ -256,7 +286,8 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: 100vh;
+        min-height: 310%;
         background: rgba(170,170,170, .5);
     }
 
@@ -271,6 +302,7 @@
         border: 1px solid #000;
         border-radius: 6px;
         padding: 0 20px;
+        display: block;
 
         h3 {
             font-weight: 100;
@@ -289,17 +321,6 @@
 
         p {
             padding-top: 10px;
-
-            &:after {
-                content: '';
-                display: block;
-                position: absolute;
-                left: 0;
-                top: 110px;
-                width: 100%;
-                height: 1px;
-                background-color: #000000;
-            }
         }
 
         span {
@@ -308,6 +329,7 @@
             right: 20px;
             font-size: 20px;
             cursor: pointer;
+            font-weight: 600;
 
             &:hover {
                 opacity: .5;
@@ -315,11 +337,51 @@
         }
     }
 
+    .modal__btn {
+        display: flex;
+        justify-content: flex-end;
+        margin: 30px 0 18px;
+    }
+
+    .btn__save {
+        border: 1px solid dodgerblue;
+        background: dodgerblue;
+        color: #fff;
+    }
+
+    .btn__close {
+        border: 1px solid #ccc;
+        background: #ccc;
+        color: #fff;
+        margin-left: 15px;
+    }
+
+    /*  buy  car  */
+    .success {
+        background: lightseagreen;
+        border-radius: 5px;
+    }
+
+    .buy__car-list {
+        margin-top: 15px;
+        list-style-type: none;
+        padding: 15px;
+    }
+
+    // animation
+    //-enter - элемент появился;  -leave
+    //-enter-active - висит на элементе, продолжительный класс; -leave-active
+    // -enter-to добавится к финальному состоянию;  -leave-to
+    .modal-enter-active, .modal-leave-active {
+        transition: all .5s;
+    }
+
+    .modal-enter, .modal-leave-to {
+        transform: translateY(-100px);
+    }
 
 
 
 
-
-
-
+    @import 'style.scss';
 </style>

@@ -33,4 +33,6 @@ export default {
     margin-bottom: 30px;
   }
 
+  @import 'style.scss';
+
 </style>
