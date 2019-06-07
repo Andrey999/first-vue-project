@@ -9,10 +9,13 @@ body {
 /* loading animation */
 .spinner {
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 50%;
     width: 40px;
     height: 40px;
+    /*margin-left: -25px;*/
+    margin-top: -25px;
+    /*transform: translate(-50%, -50%);*/
     background-color: dodgerblue;
     -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
     animation: sk-rotateplane 1.2s infinite ease-in-out;

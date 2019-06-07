@@ -33,11 +33,6 @@ new Vue({
             this.buyCars = [`Success order: ${this.car.name} - ${this.car.model} - ${ new Date().toLocaleString()}`];
             setTimeout(() => {return this.buyCarsBlockVisible = false},8000)
         },
-        // loadingAnimation: function() {
-        //     setTimeout(() => {
-        //         return this.isLoading = true;
-        //     },3000)
-        // }
     },
 
     computed: {  //  вычисленные свойства
@@ -46,7 +41,8 @@ new Vue({
         },
         filteredCars: function() {
             return this.cars.filter(car => {
-                return car.name.toLocaleLowerCase().indexOf(this.search) > -1 || car.model.toLocaleLowerCase().includes(this.search);
+                return car.name.toUpperCase().indexOf(this.search) > -1 || car.name.toLowerCase().indexOf(this.search) > -1 ||
+                       car.model.toUpperCase().includes(this.search) || car.model.toLowerCase().includes(this.search);
             })
         }
     },
@@ -57,11 +53,10 @@ new Vue({
         }
     },
 
-    created() {
+    created() { // когда  компонент создался
         setTimeout(() => {
             document.getElementById('app').style.opacity = 1;
             document.getElementById('spiner').style.display = 'none';
-        },2000);
+        },2500);
     },
-
 });
